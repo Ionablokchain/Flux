@@ -1,1 +1,355 @@
+The Ex Nihilo Operating System Programming Language
+Version 1.0
+“Every line of code is an intention. Every intention creates a world.”
 
+Contents
+Introduction
+
+Fundamental Concepts
+
+Installation and Tools
+
+Basic Syntax
+
+Declarations
+
+Instructions and Expressions
+
+Time and Probability Management
+
+Causal (Mosaic) File System
+
+Paradoxes and Security
+
+Compiling and Running
+
+Troubleshooting and “Welcome” Errors
+
+Complete Examples
+
+Quick Reference
+
+1. Introduction
+Flux is the first temporal-causal programming language designed exclusively for the Ex Nihilo operating system. It knows no files, processes, or irreversible errors. Instead, it works with intentions, probabilities, and timelines that can be rewritten or abandoned.
+
+This manual will teach you how to:
+
+write programs that don’t “run,” but become reality in consensual time;
+
+manipulate streams of intentions without fear of being completely wrong;
+
+use the power of paradoxes as a mechanism for security and creativity.
+
+Warning: Flux is not a classical language. If you try to write a C-like function or allocate memory with malloc, the system will create a benign paradox and ask you if you want to rewrite the past.
+
+2. Fundamental concepts
+2.1 Intent
+The atomic unit of execution. An intent is a statement of the form:
+“Under certain conditions, with a certain priority, let a sequence of actions happen.”
+
+Intentions never stop – they either come true or become ghost branches.
+
+2.2 Timeline
+An alternate timeline. Every decision or mistake creates a new timeline. All timelines coexist in the causal mosaic.
+
+2.3 Persistent probability
+Any value or state can be expressed as a probability (0..1). For example, x = 0.8 means "x exists in 80% of the relevant timelines".
+
+2.4 Collapse
+When a probabilistic expression needs to become a concrete result – for example, to be displayed to the user – a collapse (maximum weight, average or random) is applied.
+
+2.5 Causal hardening
+A rare and expensive mechanism that makes a time interval irreversible. After hardening, not even the creator can rewrite that part of reality. The equivalent of a commit in classical systems.
+
+3. Installation and tools
+Flux is part of the Ex Nihilo distribution. On a standard system, the compiler is called fluxc.
+
+bash
+# Check version
+fluxc --version
+# Help
+fluxc --help
+Included tools:
+
+fluxc – compiler (lexer + parser + semantic analyzer + bytecode generator)
+
+tvm – Time Virtual Machine (runs bytecode)
+
+fluxdbg – symbolic debugger (allows you to "travel" between timelines)
+
+4. Basic syntax
+Flux uses a syntax similar to a mix between Python and Rust, but with specific keywords.
+
+4.1 Comments
+flux
+# This is a comment (until the end of the line)
+4.2 Identifiers
+Alphanumeric and underscore, cannot start with a digit. Context sensitive (not case sensitive).
+
+4.3 Primitive Data Types
+Type Example Remarks
+probability 0.85 always between 0 and 1
+int 42 classical integer
+float 3.14 floating point
+string "Hello, Ex Nihilo" character sequence
+duration 10s, 250ms, 2cycles units: s, ms, ns, cycles
+interval [1s, 5s] closed temporal interval
+timeline tl_main reference to a temporal branch
+4.4 Operators
+Arithmetic: +, -, *, /
+
+Comparison: ==, !=, <, >, <=, >=
+
+Logical: and, or, not
+
+Temporal: after, before, in_time
+
+4.5 Control Structures
+flow
+if condition : {
+# then
+} else : {
+# else
+}
+
+for i in [1, 10] : {
+# loop with iteration over a collection
+}
+
+in_time_condition : {
+# paradox-risk loop – use with caution
+}
+5. Declarations
+5.1 Intent
+flow
+intent <name> {
+trigger: <event>
+priority: <0..1>
+condition: <boolean_expression>
+execute: {
+<instructions>
+}
+}
+trigger – the event that activates the intent (e.g. at_first_cognitive_sign(), every 10s, after event X)
+
+priority – how likely this intent is to be chosen when several are pending
+
+condition – additionally checked before execution
+
+5.2 Flow
+A flow is a sequence of causally related intents. Similar to a function, but runs in its own timeline.
+
+flow
+flow name(param1, param2) {
+<instructions>
+}
+5.3 Structure
+flow
+structure Name {
+field1: type,
+field2: type,
+...
+}
+5.4 Function
+flow
+function add(a: probability, b: probability) -> probability {
+return a + b;
+}
+5.5 Causal mosaic
+Declare a region of causal space (“directory” without files).
+
+flow
+causal_mosaic user_data = {
+components: temporal_sparse_matrix(),
+policies: { write: "add_branch", read: "most_likely" }
+};
+6. Instructions and expressions
+6.1 Sending sensation (instead of printing)
+flow
+send_sensation("mental image", "content", 2s);
+send_sensation("inner speech", "text");
+send_sensation("tactile sensation", "vibration", 500ms);
+
+6.2 Listening to user intent
+flow
+response = listen_intent(user, 10s, "default");
+6.3 Probabilistic collapse
+flow
+concrete_value = collapse(probabilistic_expression, "maximum_weight");
+# methods: "maximum_weight", "average", "random"
+6.4 Creating a new timeline
+flow
+new_tl = create_timeline(from: current_timeline(), weight: 0.3);
+6.5 Causal closure
+flow
+causal_closure(interval: [present - 1s, present + 1s], maximum_cost: 0.001);
+6.6 Controlled paradox generation
+flow
+paradox = trigger_paradox(type: "simple_causal_cycle", interval: [now, now+5s]);
+solve_paradox(paradox, method: "multiple_collapse_with_humor");
+7. Managing time and probability
+7.1 Time units
+1s – one causal second (can be shorter or longer than physical time)
+
+10ms – ten milliseconds
+
+1cycle – one cycle of the time scheduler
+
+7.2 Default probability
+If you don't specify a probability, a value or action has probability 1.0 in the current timeline.
+
+7.3 The with_probability operator
+flow
+x = 42 with_probability 0.9; # x is 42 in 90% of timelines
+7.4 Native temporal functions
+now() – current causal moment
+
+intent_duration(intent) – how long an intent was active
+
+delay(duration) – suspends the current timeline
+
+
+8. Causal file system (mosaic)
+There are no files, only components in a mosaic. Access is done by keys.
+
+stream
+# Write (creates a new branch)
+causal_mosaic.access(key: "user.answer").write(value, weight=0.8);
+
+# Read (automatically collapses)
+result = causal_mosaic.access(key: "user.answer", paradox_tolerance: 0.2).read();
+Mosaic policies can be:
+
+write: "add_branch" (never overwrite)
+
+write: "merge_timeline" (merge with existing timeline)
+
+read: "most_probable", read: "all", read: "random"
+
+9. Paradoxes and security
+The Ex Nihilo system uses paradoxes as a method of authentication and protection.
+
+9.1 The Security Paradox
+On an unauthorized attempt, the system generates an event that is impossible to reproduce (e.g. a sequence of 3 random prime numbers). The user must "match" that pattern without knowing it - otherwise his timeline is reset.
+
+9.2 Manually triggering a paradox
+flow
+security_paradox.manual_trigger(type: "random_prime_interval", length: 3);
+9.3 Handling paradoxes
+flow
+if detect_paradox_local() then {
+resolve_paradox(method: "multiple_collapse", involved: [current_user]);
+}
+10. Compiling and running
+10.1 Compiling
+bash
+fluxc program.flux
+This command generates a .fluxb (bytecode) file.
+
+10.2 Running
+bash
+tvm program.fluxb [--timeline main] [--prob-threshold 0.5]
+10.3 Interactive mode (REPL)
+bash
+fluxc repl
+You can write intents directly and see them collapse in real time.
+
+10.4 Compilation options
+Option Effect
+--dump-ast displays the abstract syntax tree
+--dump-bytecode displays the generated instructions
+--semantic-only only checks for correctness, does not generate bytecode
+--optimize tries to reduce the number of parasitic timelines
+11. Debugging and “welcome” mistakes
+In Flux, there are no compilation errors in the classical sense. A syntactic or semantic mistake simply creates a very low-probability branch, which can be ignored or explored.
+
+11.1 Debugging Tools
+fluxdbg – attach to a timeline and travel forward/backward
+
+Debugger Commands:
+
+timeline list – show all active branches
+
+switch <id> – change the current timeline
+
+collapse prob – force collapse of a probability
+
+rewrite [interval] – undo the last actions (if not committed)
+
+11.2 Common Mistakes (and how to turn them into an advantage)
+Mistake What Flux does How to use it creatively
+Undefined variable Creates a timeline where the variable exists by default You can “teach” the system to define the variable from the context
+Infinite loop Turns it into an educational paradox Generates unique temporal keys for security
+Access to uninitialized memory Returns probability 0.5 (“may exist”) Use to test hypotheses
+12. Complete Examples
+12.1 Hello, Ex Nihilo
+flux
+intent Hello {
+trigger: at_first_cognitive_sign()
+execute: {
+send_sensation("mental image", "✨ Welcome to the world without files! ✨", 3s);
+}
+}
+12.2 Probability calculator
+flow
+function calculate_chance(event: string) -> probability {
+if event == "rain tomorrow" : {
+return 0.3;
+} else : {
+return 0.5;
+}
+}
+
+intent TestProb {
+trigger: every 1s
+execute: {
+chance = calculate_chance("rain tomorrow");
+message = "The chance of rain is " ++ collapse(chance, "maximum_weight");
+send_sensation("inner speech", message, 1s);
+}
+}
+12.3 Writing and Reading in Mosaic
+flow
+causal_mosaic user_memory = {
+components: temporal_sparse_matrix(),
+policies: { write: "add_branch", read: "most_likely" }
+};
+
+intent Memory {
+trigger: every_10_causal_seconds
+execute: {
+# write a thought
+user_memory.access(key: "last_thought").write("I forgot something...", weight=0.9);
+
+# read
+memory = user_memory.access(key: "last_thought").read();
+send_sensation("inner_talk", "I remember: " ++ memory, 1s);
+}
+}
+13. Quick Reference
+Category Syntax / Example
+Intent intent N { trigger: ... execute: { ... } }
+Flow flow N(p) { ... }
+Structure structure S { c: type }
+Send send_sensation("type", "content", duration);
+Listen x = listen_intent(user, timeout, fallback);
+Collapse y = collapse(x, "maximum_weight");
+Timeline tl = create_timeline(from: current_tl, weight: 0.5);
+Ending causal_ending(interval: [t1, t2], cost: 0.01);
+Paradox p = trigger_paradox(...); resolve_paradox(p);
+Mosaic causal_mosaic name { ... }
+Probability x = 42 with probability 0.8;
+Duration 10s, 250ms, 2cycles
+Time comparisons event1 by event2
+Troubleshooting fluxdbg program.fluxb
+Appendix: Glossary
+Negotiated causality – the property of the system to adjust causal relationships according to user intentions.
+
+Phantom error – a mistake that has been abandoned, but remains in a parallel timeline, with no effect on consensus.
+
+Temporal consensus – the implicit agreement among all active users on a common timeline.
+
+Temporal Virtual Machine (TVM) – the Flux bytecode executor, which simulates collapses and branches.
+
+This manual is a living document. As you explore Flux, you will find that it too rewrites itself – exactly as it was designed.
+Ex Nihilo, the development team – anytime, never.
