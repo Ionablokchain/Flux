@@ -1,1 +1,0 @@
-python fluxc.py exemplu.flux --dump --run
