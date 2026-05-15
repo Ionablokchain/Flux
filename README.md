@@ -1,205 +1,157 @@
-# Flux – The Temporal Programming Language for Ex Nihilo OS
+# Flux
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)](https://github.com/exnihilo/flux)
-[![TVM](https://img.shields.io/badge/TVM-compatible-purple)](https://github.com/exnihilo/tvm)
+A small, honest programming language with a temporal-causal vocabulary.
 
-> **"Every line of code is an intention. Every intention creates a world."**
+Flux programs are organized around **intentions** — event-driven blocks with a
+trigger, a priority, an optional condition, and a body. The body sends
+**sensations**, listens for input, and can **collapse** weighted distributions
+of values. State can be stored in a **causal mosaic** — a sparse key/value
+store with weighted branches.
 
-Flux is the first **temporal-causal programming language**, designed exclusively for the *Ex Nihilo* operating system – a world without files, processes, or irreversible errors. Instead of classical execution, Flux programs express **intentions** that **become reality** across parallel **timelines**, with probabilities and paradoxes as first-class citizens.
+The vocabulary is evocative; the semantics are mundane. There are no quantum
+computers in here. `causal_void.exists()` returns `true`. `generate_paradox()`
+returns a deterministic counter-derived string. The fun is in writing programs
+that read like rituals; the runtime is a plain stack VM.
 
----
+## Quick start
 
-## ✨ Why Flux?
+```
+$ cd compiler
+$ python3 fluxc.py ../examples/hello.flux --run
+[mental_image] Hello from Flux [2s]
+```
 
-- **No files, no processes** – just intentions and causal mosaics.
-- **Mistakes are not errors** – they become parallel timelines you can explore or abandon.
-- **Probabilities are persistent** – every value can exist in multiple states with different weights.
-- **Paradoxes as security** – authentication through temporally impossible patterns.
-- **Causal hardening** – make intervals of time truly irreversible (like `commit` for reality).
+Flags:
 
-## 🚀 Quick Example
+- `--dump` — print the compiled bytecode.
+- `--run` — execute the program on the Temporal VM.
+- `--seed N` — seed the VM's random number generator for reproducible runs.
+- `--quiet` — hide semantic warnings.
+
+## A program
 
 ```flux
-intentie HelloWorld {
-    declansare: la_primul_semn_cognitiv()
-    prioritate: 0.9
-    executa: {
-        trimite_senzatie("imagine mentală", 
-            "✨ Welcome to a world without files! ✨", 
-            3s);
-        
-        raspuns = asculta_intentie(utilizator, 10s, "silence");
-        
-        daca raspuns != "silence" : {
-            colapseaza(raspuns, "pondere_maximă");
-            trimite_senzatie("vorbire interioară", 
-                "You said: " ++ raspuns, 
-                1s);
-        }
+intention Greet {
+    trigger:   on_boot()
+    priority:  0.9
+    condition: causal_void.exists()
+    execute: {
+        let name = listen(user, 5s, "world");
+        send("mental_image", "hello, " ++ name, 2s);
     }
 }
-This program doesn't "run" – it becomes real in the temporal consensus of Ex Nihilo.
+```
 
-📦 Installation
-Flux requires Python 3.12+ for the compiler toolchain (the production TVM runs natively on Ex Nihilo hardware).
+## A program that decides
 
-bash
-git clone https://github.com/exnihilo/flux.git
-cd flux
-pip install -r requirements.txt
-sudo make install   # installs fluxc and tvm
-Verify installation:
-
-bash
-fluxc --version
-tvm --version
-🧠 Core Concepts
-Concept	Description
-Intention	An atomic unit of execution that triggers on an event, with priority and condition.
-Timeline	A parallel causal branch. Every decision or mistake creates a new timeline.
-Probability	A value between 0 and 1 representing existence weight across timelines.
-Collapse	The act of turning a probabilistic expression into a concrete value.
-Causal Mosaic	A file‑system without files – a sparse temporal matrix.
-Causal Hardening	Making a time interval irreversible (expensive, requires consensus).
-Paradox	A controlled logical inconsistency used for security or creativity.
-📖 Language Guide
-Basic Syntax
-flux
-# Comments start with '#'
-
-x = 42 cu_probabilitate 0.85;   # x is 42 in 85% of timelines
-
-durata = 10s;                   # time units: s, ms, ns, cycles
-
-interval = [1s, 5s];            # closed temporal interval
-Intentions
-flux
-intentie MyIntent {
-    declansare: la fiecare 5s
-    prioritate: 0.7
-    conditie: vid_cauzal.exista()
-    executa: {
-        # ... actions
+```flux
+intention Decide {
+    trigger: on_boot()
+    execute: {
+        let actions = dist {
+            "wait":    0.5,
+            "explore": 0.3,
+            "act":     0.2
+        };
+        let chosen = collapse(actions, weighted_random);
+        send("mental_image", "chose: " ++ chosen, 1s);
     }
 }
-Control Structures
-flux
-daca conditie : {
-    # then branch
-} altfel : {
-    # else branch
-}
+```
 
-pentru i in [1, 10] : {
-    # loop over a collection
-}
+`collapse` is the central operation: it reduces a weighted distribution
+to a single value using a method like `max_weight`, `weighted_random`,
+`mean`, or `first`. Distributions can be written inline with `dist { ... }`
+or produced by mosaic reads.
 
-in_timp_ce conditie : {
-    # use with care – may create paradoxes
-}
-Built‑in Functions
-Function	Description
-trimite_senzatie(tip, continut, durata?)	Send a cognitive sensation (image, inner voice, tactile)
-asculta_intentie(sursa, timeout, fallback)	Listen for user/system intention
-colapseaza(expr, metoda)	Collapse probability (pondere_maximă, medie, aleator)
-creaza_timeline(din, pondere)	Fork a new timeline
-inchegare_cauzala(interval, cost_maxim)	Make time interval irreversible
-declanseaza_paradox(tip, interval)	Generate a controlled paradox
-Causal Mosaic (Files without files)
-flux
-mozaic_cauzal user_data {
-    componente: matrice_sparsa_temporala(),
-    politici: { scriere: "adăugă_ramură", citire: "cea_mai_probabilă" }
-}
+When the module runs, intentions are scheduled in descending priority order.
+Each intention's `trigger` and `condition` are evaluated; if both are truthy,
+the body runs.
 
-# Write
-user_data.acces(cheie: "last_thought").scrie("I forgot something", pondere=0.9);
+## Language at a glance
 
-# Read
-memory = user_data.acces(cheie: "last_thought").citeste();
-🛠️ Toolchain
-Compiler fluxc
-bash
-fluxc program.flux                # compiles to program.fluxb
-fluxc program.flux --dump-ast     # show abstract syntax tree
-fluxc program.flux --dump-bytecode
-fluxc program.flux --run          # compile and run on TVM
-fluxc repl                        # interactive REPL
-Temporal Virtual Machine tvm
-bash
-tvm program.fluxb --timeline main --prob-threshold 0.5
-Debugger fluxdbg
-bash
-fluxdbg program.fluxb
-Debugger commands:
+- **Declarations:** `intention`, `function`, `flow`, `struct`, `causal_mosaic`.
+- **Statements:** `let`, `<assignment>`, `if`/`else`, `while`, `for ... in ...`,
+  `return`, `launch`, `send`, `collapse`.
+- **Expressions:** numeric/string/boolean/duration literals, list literals
+  `[a, b, c]`, identifiers, `f(args)`, `obj.field`, `obj.method(args)`,
+  `listen(source, timeout, fallback)`, `collapse(expr, method)`, binary
+  operators (`+ - * / %`, `== != < > <= >=`, `&& ||`, `++` for string
+  concatenation), unary `-` and `!`.
+- **Durations:** first-class. `2s`, `500ms`, `250us`, `100ns`, `3cycles`.
+  Internally normalized to nanoseconds. `2s + 500ms` evaluates to a duration.
+- **Collapse methods:** `max_weight`, `mean`, `weighted_random`, `random`,
+  `first`. Operates on either a scalar (point distribution) or a list of
+  `(value, weight)` tuples (used internally by mosaics).
 
-timeline list – show all active timelines
+## Project layout
 
-switch <id> – change current timeline
+```
+flux/
+├── compiler/         # Lexer, parser, semantic analyzer, codegen, VM, CLI
+│   ├── flux_lexer.py
+│   ├── flux_parser.py
+│   ├── flux_ast.py
+│   ├── flux_semantic.py
+│   ├── flux_bytecode.py
+│   ├── flux_codegen.py
+│   ├── tvm.py
+│   └── fluxc.py
+├── examples/         # Standalone example programs
+├── benchmarks/       # Loop-heavy programs that exercise the VM
+├── integration/      # Small programs used as end-to-end smoke tests
+├── tests/            # Unit + end-to-end test suite
+├── docs/
+│   └── language.md
+└── CHANGELOG.md
+```
 
-colapseaza prob – force a probability collapse
+## Tests
 
-rescrie [interval] – undo last actions (if not hardened)
+```
+$ python3 -m unittest discover -s tests -p "test_*.py"
+...
+Ran 129 tests in 0.18s
+OK
+```
 
-📚 Full Documentation
-User Manual – complete language reference
+The tests cover the lexer (duration parsing, escapes, multi-char operators,
+token spans), the parser (precedence, associativity, scopes, method-chain
+parsing, dist literals), the semantic analyzer (range checks, scope leakage,
+unknown-call warnings), codegen (correct opcode sequences,
+statement-vs-expression form of `collapse`, dist literals), the VM
+(arithmetic, control flow, collapse semantics across all four methods,
+mosaic round-trips, deterministic seeded RNG, scripted `listen` input,
+priority-ordered intention scheduling, recursive functions), a
+distribution-focused suite that verifies sample proportions match weights
+over 100 trials, and the diagnostic renderer (caret alignment, clamping,
+colorless rendering, and pipeline tests for the kinds of mistakes a user
+actually makes).
 
-Ex Nihilo OS Book – design philosophy
+## Error messages
 
-API Reference – built‑ins and standard library
+Compiler errors point at the source. A missing semicolon looks like this:
 
-🧪 Examples
-Check the examples/ directory:
+```
+error: expected ';'
+  --> greet.flux:3:22
+   |
+ 3 |         let x = 1 + 2
+   |                      ^ add ';' at the end of this line
+```
 
-Example	Description
-hello.flux	Basic "Hello World" using cognitive sensations
-probabilities.flux	Working with probabilistic values and collapse
-mosaic.flux	Using the causal mosaic as persistent storage
-paradox_security.flux	Authentication through temporal paradoxes
-timeline_fork.flux	Creating and merging timelines
-Run an example:
+The compiler emits ANSI colors when stderr is a terminal. Disable with
+`--no-color` or by setting `NO_COLOR=1` in the environment.
 
-bash
-fluxc examples/hello.flux --run
-🧰 Requirements for Building from Source
-Python 3.12+
+## What this is not
 
-antlr4 (optional, for grammar development)
+Flux is a small interpreted language with a thematic surface. It does not
+implement actual probabilistic programming, quantum effects, hardware
+acceleration, or causal reasoning. Names like `causal_void`, `paradox`, and
+`hardening` are vocabulary — they map to ordinary, deterministic runtime
+operations. The point is to be a coherent toy with a consistent voice, not
+to over-promise. If you want a real probabilistic system, see Pyro or Stan.
 
-Ex Nihilo hardware (for native execution) – or use the TVM emulator on Linux/macOS/Windows
+## License
 
-🤝 Contributing
-We welcome contributions! Flux is still a young language – there are many paradoxes waiting to be discovered.
-
-Fork the repository
-
-Create your feature branch (git checkout -b feature/amazing-paradox)
-
-Commit your changes (git commit -m 'Add a new collapse method')
-
-Push to the branch (git push origin feature/amazing-paradox)
-
-Open a Pull Request
-
-Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
-
-📄 License
-Distributed under the MIT License. See LICENSE for more information.
-
-🙏 Acknowledgements
-The Ex Nihilo OS team – for building a world without files
-
-Early adopters who weren't afraid to break causality
-
-Every user who has ever said: "I wish I could undo that mistake"
-
-📞 Contact & Community
-Discord Server
-
-Mailing List
-
-GitHub Issues
-
-Flux is not just a programming language – it's a way to reshape reality, one intention at a time.
-Ex Nihilo, development team – anytime, never.
+Apache-2.0 license
